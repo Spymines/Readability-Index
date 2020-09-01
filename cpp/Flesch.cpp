@@ -22,9 +22,9 @@ int main(int argc, char* argv[]){
 		cout << "File not found." << endl; 
 		exit(0);
 	}
-	string word; 
-	while(infile.good()){
-		infile >> word; 
+	string word;
+ 
+	while(infile >> word){ 
 		cout << word; 
 	}
 }
