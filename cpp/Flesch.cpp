@@ -1,11 +1,14 @@
 //C++ Flesch file, currently working on file read in
 //File read in works
+//Getting seg faule and more difficult words than actual words
+
 
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <cmath>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -13,8 +16,9 @@ void checkInput(int argc);
 bool isWord(string word);
 bool endsSentence(string word);
 int countSyllables(string word); 
-void computeLevels(double wordCount, double sentenceCount, double syllableCount);
+void computeLevels(double wordCount, double sentenceCount, double syllableCount, double difficultCount);
 void importDifficultWords(vector<string> &difficultWords);
+bool isDifficult(vector<string> &difficultWords, string word);
 
 
 int main(int argc, char* argv[]){
@@ -35,23 +39,24 @@ int main(int argc, char* argv[]){
 	vector<string> difficultWords; 
 	importDifficultWords(difficultWords);
 
-
-	for(int t = 0; t < 1000; t++)
-		cout << difficultWords[t] << endl; 
-
 	double wordCount = 0; 
 	double sentenceCount = 0; 
 	double syllableCount = 0; 
+	double difficultCount = 0;
 
 	while(infile >> word){ 
-		if (isWord(word))
+		if (isWord(word)){
 			wordCount++; 
-		if (endsSentence(word))
-			sentenceCount++; 
-		syllableCount += countSyllables(word);
-	} 
+			if (endsSentence(word))
+				sentenceCount++; 
+			syllableCount += countSyllables(word);
+			if (isDifficult(difficultWords, word))
+				difficultCount++;
+		}
+		cout << wordCount << "   " << difficultCount << endl;
+	}
 
-	computeLevels(wordCount, sentenceCount, syllableCount);
+	computeLevels(wordCount, sentenceCount, syllableCount, difficultCount);
 
 	cout << wordCount << endl; 
 	cout << sentenceCount << endl; 
@@ -124,7 +129,7 @@ int countSyllables(string word){
 	return currCount; 
 }
 
-void computeLevels(double wordCount, double sentenceCount, double syllableCount){
+void computeLevels(double wordCount, double sentenceCount, double syllableCount, double difficultCount){
 	double alpha = syllableCount/wordCount;
 	double beta = wordCount/sentenceCount; 	
 	double flesch = 206.835 - (alpha*84.6) - (beta*1.015);
@@ -157,8 +162,30 @@ void importDifficultWords(vector<string> &difficultWords){
 		}
 		difficultWords.push_back(currWord);
 	}
+	sort(difficultWords.begin(), difficultWords.end());
 }
 
+bool isDifficult(vector<string> &difficultWords, string word){ 
+	for(int i = 0; i < word.size(); i++){
+		word[i] = tolower(word[i]);
+	}	
+	int low = 0; 
+	int high = difficultWords.size();
+
+	while(low <= high){
+		int mid = (low+high)/2;
+ 
+		if (word.compare(difficultWords[mid]) > 0)
+			low = mid+1;
+		else if (word.compare(difficultWords[mid]) < 0)
+			high = mid-1;
+		else{
+			cout << mid << endl;  
+			return false; 
+		}
+	}
+	return true; 
+}
 
 
 
