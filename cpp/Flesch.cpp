@@ -9,6 +9,7 @@
 #include <cmath>
 #include <vector>
 #include <algorithm>
+#include <cstddef>
 
 using namespace std;
 
@@ -19,7 +20,7 @@ int countSyllables(string word);
 void computeLevels(double wordCount, double sentenceCount, double syllableCount, double difficultCount);
 void importDifficultWords(vector<string> &difficultWords);
 bool isDifficult(vector<string> &difficultWords, string word);
-
+void formatWord(string &word);
 
 int main(int argc, char* argv[]){
 	
@@ -45,22 +46,16 @@ int main(int argc, char* argv[]){
 	double difficultCount = 0;
 
 	while(infile >> word){ 
-		if (isWord(word)){
+		if (isWord(word))
 			wordCount++; 
-			if (endsSentence(word))
-				sentenceCount++; 
-			syllableCount += countSyllables(word);
-			if (isDifficult(difficultWords, word))
-				difficultCount++;
-		}
-		cout << wordCount << "   " << difficultCount << endl;
+		if (endsSentence(word))
+			sentenceCount++; 
+		syllableCount += countSyllables(word);
+		if (isDifficult(difficultWords, word))
+			difficultCount++;
 	}
 
 	computeLevels(wordCount, sentenceCount, syllableCount, difficultCount);
-
-	cout << wordCount << endl; 
-	cout << sentenceCount << endl; 
-	cout << syllableCount << endl; 
 }
 
 //Checks for the correct number of command line arguments, ends program upon incorrect number
@@ -135,12 +130,24 @@ void computeLevels(double wordCount, double sentenceCount, double syllableCount,
 	double flesch = 206.835 - (alpha*84.6) - (beta*1.015);
 
 
-	cout << "Flesch = " << round(flesch) << endl; 
+//	cout << "Flesch = " << round(flesch) << endl; 
 
 	double fleschKincaid = (alpha*11.8) + (beta*.39) - 15.59;
 
-	cout << "Flesch-Kincaid = " << fleschKincaid << endl; 
-	
+//	cout <<  "Flesch-Kincaid = " << fleschKincaid << endl; 
+
+	double dcAlpha = difficultCount/wordCount;
+
+	double daleChall = (dcAlpha *100 *.1579 + (beta * 0.0496));
+
+	if(dcAlpha > 0.05)
+		daleChall += 3.6365;
+
+//	cout << "Dale-Chall = " << daleChall << endl; 
+		
+	printf("Flesch Readability Index =  %.0f \n", flesch);
+	printf("Flesch-Kincaid Grade Level Index = %.1f \n", fleschKincaid);
+	printf("Dale-Chall Readability Score = %.1f \n", daleChall);
 }
 
 void importDifficultWords(vector<string> &difficultWords){
@@ -166,6 +173,9 @@ void importDifficultWords(vector<string> &difficultWords){
 }
 
 bool isDifficult(vector<string> &difficultWords, string word){ 
+	formatWord(word);
+	if (word.compare("") == 0 || word.compare(" ") == 0)
+		return false;
 	for(int i = 0; i < word.size(); i++){
 		word[i] = tolower(word[i]);
 	}	
@@ -179,15 +189,27 @@ bool isDifficult(vector<string> &difficultWords, string word){
 			low = mid+1;
 		else if (word.compare(difficultWords[mid]) < 0)
 			high = mid-1;
-		else{
-			cout << mid << endl;  
+		else{ 
 			return false; 
 		}
-	}
+	} 
 	return true; 
 }
 
-
+void formatWord(string &word){
+	for(int i = 0; i < word.size(); i++){
+		word[i] = tolower(word[i]);
+	}
+	bool done = false;
+	while(!done){
+		int location = -1; 
+		location = word.find_first_of("[].,;:!?/'1234567890()#");
+		if(location == -1)
+			done = true; 
+		else 
+			word.erase(word.begin()+location);
+	}
+}
 
 
 
