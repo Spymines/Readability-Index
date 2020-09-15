@@ -21,6 +21,7 @@ void computeLevels(double wordCount, double sentenceCount, double syllableCount,
 void importDifficultWords(vector<string> &difficultWords);
 bool isDifficult(vector<string> &difficultWords, string word);
 void formatWord(string &word);
+bool isVowel(char c);
 
 int main(int argc, char* argv[]){
 	
@@ -70,6 +71,7 @@ void checkInput(int argc){
 	}
 }
 
+//Checks to see if a input string is numeric(and therefore not a word)
 bool isWord(string input){
 	bool word = true; 
 	for(int i = 0; i < input.size(); i++){
@@ -81,6 +83,7 @@ bool isWord(string input){
 	return word; 
 }
 
+//Checks a word for end punctuation to denote the end of a sentence
 bool endsSentence(string word){
 	bool end = false; 
 	for(int i = 0; i < word.size(); i++){
@@ -91,17 +94,17 @@ bool endsSentence(string word){
 	return end; 
 }
 
+//Counts and returns the syllables in the input word
 int countSyllables(string word){
 	int currCount = 0; 
 	for (int i = 0; i < word.size(); i++){
 		char c = tolower(word[i]);
-		if(c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u' || c == 'y'){
+		if(isVowel(tolower(word[i]))){
 			if(i == 0){
 				currCount++; 		
 			}
 			else{
-				char t = tolower(word[i-1]);
-				if(t == 'a' || t == 'e' || t == 'i' || t == 'o' || t == 'u' || t == 'y'){
+				if(isVowel(tolower(word[i-1]))){
 					break; 
 				}
 				else{
@@ -110,8 +113,7 @@ int countSyllables(string word){
 			}
 		}
 		if(tolower(word[word.size()-1]) == 'e'){
-			char r = tolower(word[word.size()-2]);
-			if(r == 'a' || r == 'e' || r == 'i' || r == 'o' || r == 'u' || r == 'y'){
+			if(isVowel(tolower(word[word.size()-2]))){
 				break;
 			}
 			else{
@@ -124,17 +126,13 @@ int countSyllables(string word){
 	return currCount; 
 }
 
+//Does the computations to calculate and print the reading levels
 void computeLevels(double wordCount, double sentenceCount, double syllableCount, double difficultCount){
 	double alpha = syllableCount/wordCount;
 	double beta = wordCount/sentenceCount; 	
 	double flesch = 206.835 - (alpha*84.6) - (beta*1.015);
 
-
-//	cout << "Flesch = " << round(flesch) << endl; 
-
 	double fleschKincaid = (alpha*11.8) + (beta*.39) - 15.59;
-
-//	cout <<  "Flesch-Kincaid = " << fleschKincaid << endl; 
 
 	double dcAlpha = difficultCount/wordCount;
 
@@ -142,14 +140,14 @@ void computeLevels(double wordCount, double sentenceCount, double syllableCount,
 
 	if(dcAlpha > 0.05)
 		daleChall += 3.6365;
-
-//	cout << "Dale-Chall = " << daleChall << endl; 
-		
+ 		
 	printf("Flesch Readability Index =  %.0f \n", flesch);
 	printf("Flesch-Kincaid Grade Level Index = %.1f \n", fleschKincaid);
 	printf("Dale-Chall Readability Score = %.1f \n", daleChall);
 }
 
+//Brings in the list of difficult words from the file provided
+//Makes all words lowercase for later comparisons
 void importDifficultWords(vector<string> &difficultWords){
 
 	string wordFile = "/pub/pounds/CSC330/dalechall/wordlist1995.txt";
@@ -172,6 +170,7 @@ void importDifficultWords(vector<string> &difficultWords){
 	sort(difficultWords.begin(), difficultWords.end());
 }
 
+//Checks to see if the string sent in is on the difficult word list
 bool isDifficult(vector<string> &difficultWords, string word){ 
 	formatWord(word);
 	if (word.compare("") == 0 || word.compare(" ") == 0)
@@ -182,6 +181,7 @@ bool isDifficult(vector<string> &difficultWords, string word){
 	int low = 0; 
 	int high = difficultWords.size();
 
+	//Search for word
 	while(low <= high){
 		int mid = (low+high)/2;
  
@@ -196,6 +196,7 @@ bool isDifficult(vector<string> &difficultWords, string word){
 	return true; 
 }
 
+//Formats words to lowercase and removes unwanted characters
 void formatWord(string &word){
 	for(int i = 0; i < word.size(); i++){
 		word[i] = tolower(word[i]);
@@ -211,10 +212,16 @@ void formatWord(string &word){
 	}
 }
 
+//Checks to see if the sent in char is a vowel
+bool isVowel(char c){
+	if(c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u' || c == 'y'){
+        	return true;
+        }
+        else{
+                return false;
+        }
 
-
-
-
+}
 
 
 
