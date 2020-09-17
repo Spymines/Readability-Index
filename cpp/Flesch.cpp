@@ -28,7 +28,8 @@ int main(int argc, char* argv[]){
 	checkInput(argc); 
 
 	string providedFile = argv[1];
-	string textFile = "/pub/pounds/CSC330/translations/" + providedFile; 
+	string textFile = "./test.txt";
+	//string textFile = "/pub/pounds/CSC330/translations/" + providedFile; 
 	
 	ifstream infile; 
 	infile.open(textFile);
@@ -55,6 +56,11 @@ int main(int argc, char* argv[]){
 		if (isDifficult(difficultWords, word))
 			difficultCount++;
 	}
+
+	cout << "Sentences: " << sentenceCount << endl; 
+	cout << "Words: " << wordCount << endl; 
+	cout << "Syllables: " << syllableCount << endl; 
+	cout << "Difficult: " << difficultCount << endl; 
 
 	computeLevels(wordCount, sentenceCount, syllableCount, difficultCount);
 }
