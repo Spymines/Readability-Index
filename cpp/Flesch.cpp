@@ -28,8 +28,8 @@ int main(int argc, char* argv[]){
 	checkInput(argc); 
 
 	string providedFile = argv[1];
-	string textFile = "./test.txt";
-	//string textFile = "/pub/pounds/CSC330/translations/" + providedFile; 
+//	string textFile = "./test.txt";
+	string textFile = "/pub/pounds/CSC330/translations/" + providedFile; 
 	
 	ifstream infile; 
 	infile.open(textFile);
@@ -48,13 +48,17 @@ int main(int argc, char* argv[]){
 	double difficultCount = 0;
 
 	while(infile >> word){ 
-		if (isWord(word))
+		if (isWord(word)){
 			wordCount++; 
-		if (endsSentence(word))
-			sentenceCount++; 
-		syllableCount += countSyllables(word);
-		if (isDifficult(difficultWords, word))
-			difficultCount++;
+			if (endsSentence(word))
+				sentenceCount++; 
+//		formatWord(word);
+//		syllableCount += countSyllables(word);
+			if (isDifficult(difficultWords,word))
+				difficultCount++;
+			formatWord(word);
+			syllableCount += countSyllables(word);
+		}
 	}
 
 	cout << "Sentences: " << sentenceCount << endl; 
@@ -109,24 +113,21 @@ int countSyllables(string word){
 			if(i == 0){
 				currCount++; 		
 			}
-			else{
-				if(isVowel(tolower(word[i-1]))){
-					break; 
-				}
-				else{
-					currCount++;
-				}
+			else if(! isVowel(tolower(word[i-1]))){
+				currCount++;
 			}
 		}
-		if(tolower(word[word.size()-1]) == 'e'){
-			if(isVowel(tolower(word[word.size()-2]))){
-				break;
-			}
-			else{
-				currCount--;
-			}
+	}
+	if(tolower(word[word.size()-1]) == 'e'){
+		if(isVowel(tolower(word[word.size()-2]))){
+			
 		}
-	}	
+		else{
+			currCount--;
+		}
+	}
+	
+	cout << word << " " << currCount << endl;	
 	if(currCount <= 0)
 		currCount = 1;
 	return currCount; 
@@ -210,7 +211,7 @@ void formatWord(string &word){
 	bool done = false;
 	while(!done){
 		int location = -1; 
-		location = word.find_first_of("[].,;:!?/'1234567890()#");
+		location = word.find_first_of("[].,;:!?/1234567890()#\"");
 		if(location == -1)
 			done = true; 
 		else 
