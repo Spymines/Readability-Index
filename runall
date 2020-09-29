@@ -1,0 +1,20 @@
+c++ ./cpp/Flesch.cpp
+
+echo "ASV.txt"
+a.out ASV.txt
+./cpp/a.out ASV.txt
+echo
+python3 ./python/Flesch.py ASV.txt
+echo
+./cpp/a.out BBE.txt
+./cpp/a.out DARBY.txt
+./cpp/a.out DRB.txt
+./cpp/a.out KJ21.txt
+./cpp/a.out KJV.txt
+./cpp/a.out NAB.txt
+./cpp/a.out NASB.txt
+./cpp/a.out NIV.txt
+./cpp/a.out NKJV.txt
+./cpp/a.out NLT.txt
+./cpp/a.out WEB.txt
+./cpp/a.out YLT.txt 
