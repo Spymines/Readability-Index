@@ -21,19 +21,24 @@ public static void main(String args[]){
 		//Reads in file word by word
 		String filename = "/pub/pounds/CSC330/translations/" + args[0];
 //		filename = "test.txt";
-		File txtFile = new File(filename);
-		Scanner inFile = new Scanner(txtFile);
-		while(inFile.hasNext()){
-			String word = inFile.next();
-				
-			if(isWord(word)){
-				wordCount++;
-				if(endsSentence(word))
-					sentenceCount++;
-				word = formatWord(word);
-				syllableCount += countSyllables(word);
-				if(isDifficult(word, wordList))
-					difficultCount++;			
+//		File txtFile = new File(filename);
+		BufferedReader inFile = new BufferedReader(new FileReader(filename));
+		while(inFile.ready()){
+			String line = inFile.readLine();
+			String words[] = line.split(" ");
+			
+			for(String word:words){			
+
+				if(isWord(word)){
+					//System.out.println(word);
+					wordCount++;
+					if(endsSentence(word))
+						sentenceCount++;
+					word = formatWord(word);
+					syllableCount += countSyllables(word);
+					if(isDifficult(word, wordList))
+						difficultCount++;			
+				}
 			}
 		}
 		System.out.print("Word Count: ");	
@@ -47,7 +52,7 @@ public static void main(String args[]){
 
 		computeScores(wordCount, sentenceCount, syllableCount, difficultCount);
 	}
-	catch(FileNotFoundException e){
+	catch(IOException e){
 		System.out.println("File not found.");
 		System.exit(0);
 	}
