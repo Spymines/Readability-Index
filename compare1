@@ -1,0 +1,25 @@
+echo "C++"
+c++ ./cpp/Flesch.cpp
+time a.out $1
+rm a.out
+echo
+
+echo "Java"
+javac -d ./ ./java/Flesch.java
+time java Flesch $1
+rm Flesch.class
+echo
+
+echo "Python"
+time python3 ./python/Flesch.py $1
+echo
+
+echo "Perl"
+time ./perl/Flesch.pl $1
+echo
+
+echo "Fortran"
+gfortran ./fortran/Flesch.f95
+time a.out $1
+rm a.out
+echo
