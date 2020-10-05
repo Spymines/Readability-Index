@@ -12,7 +12,7 @@ void checkInput(int argc);
 bool isWord(string word);
 bool endsSentence(string word);
 int countSyllables(string word); 
-void computeLevels(double wordCount, double sentenceCount, double syllableCount, double difficultCount);
+void computeLevels(double wordCount, double sentenceCount, double syllableCount, double difficultCount, bool bash, string name);
 void importDifficultWords(vector<string> &difficultWords);
 bool isDifficult(vector<string> &difficultWords, string word);
 void formatWord(string &word);
@@ -20,9 +20,22 @@ bool isVowel(char c);
 
 int main(int argc, char* argv[]){
 	
-	checkInput(argc); 
+	checkInput(argc);  
+	
+	//Checks for bash command line argument
+	bool bash = false;
+	if(argc == 3){
+		string arg2 = argv[2];
+		if(arg2 == "bash"){
+			bash = true;
+		}
+	}
+
 
 	string providedFile = argv[1];
+	//Isolate file name for bash
+	string name = providedFile.substr(0, providedFile.find_first_of('.')); 
+
 	string textFile = "/pub/pounds/CSC330/translations/" + providedFile; 
 	
 	ifstream infile; 
@@ -59,7 +72,7 @@ int main(int argc, char* argv[]){
 //	cout << "Syllables: " << syllableCount << endl; 
 //	cout << "Difficult: " << difficultCount << endl; 
 
-	computeLevels(wordCount, sentenceCount, syllableCount, difficultCount);
+	computeLevels(wordCount, sentenceCount, syllableCount, difficultCount,bash, name);
 }
 
 //Checks for the correct number of command line arguments, ends program upon incorrect number
@@ -68,7 +81,7 @@ void checkInput(int argc){
 		cout << "Please provide a file name from the command line." << endl; 
 		exit(0); 
 	}
-	if(argc > 2){
+	if(argc > 3){
 		cout << "Too many command line arguments" << endl;
 		exit(0); 
 	}
@@ -122,7 +135,7 @@ int countSyllables(string word){
 }
 
 //Does the computations to calculate and print the reading levels
-void computeLevels(double wordCount, double sentenceCount, double syllableCount, double difficultCount){
+void computeLevels(double wordCount, double sentenceCount, double syllableCount, double difficultCount, bool bash, string name){
 	double alpha = syllableCount/wordCount;
 	double beta = wordCount/sentenceCount; 	
 	double flesch = 206.835 - (alpha*84.6) - (beta*1.015);
@@ -135,10 +148,17 @@ void computeLevels(double wordCount, double sentenceCount, double syllableCount,
 
 	if(dcAlpha > 0.05)
 		daleChall += 3.6365;
- 		
-	printf("Flesch Readability Index =  %.0f \n", flesch);
-	printf("Flesch-Kincaid Grade Level Index = %.1f \n", fleschKincaid);
-	printf("Dale-Chall Readability Score = %.1f \n", daleChall);
+ 
+	//Printing in and out of bash
+	if(bash){
+		cout << "C++\t\t" << name << "\t\t";
+		printf("%.0f\t%.1f\t\t%.1f\n", flesch, fleschKincaid, daleChall);
+	}
+	else{
+		printf("Flesch:  %.0f \n", flesch);
+		printf("Flesch-Kincaid: %.1f \n", fleschKincaid);
+		printf("Dale-Chall: %.1f \n", daleChall);
+	}
 }
 
 //Brings in the list of difficult words from the file provided
