@@ -1,20 +1,106 @@
+printf "Language\tTranslation\tFlesch\tFlesch-Kincaid\tDale-Chall\n"
+
 c++ ./cpp/Flesch.cpp
 
-echo "ASV.txt"
+a.out ASV.txt bash
+a.out BBE.txt bash
+a.out DARBY.txt bash
+a.out DRB.txt bash
+a.out KJ21.txt bash 
+a.out KJV.txt bash
+a.out NAB.txt bash
+a.out NASB.txt bash
+a.out NIV.txt bash
+a.out NKJV.txt bash
+a.out NLT.txt bash
+a.out WEB.txt bash
+a.out YLT.txt bash
+
+echo
+
+python3 ./python/Flesch.py ASV.txt bash
+python3 ./python/Flesch.py BBE.txt bash
+python3 ./python/Flesch.py DARBY.txt bash
+python3 ./python/Flesch.py DRB.txt bash
+python3 ./python/Flesch.py KJ21.txt bash
+python3 ./python/Flesch.py KJV.txt bash
+python3 ./python/Flesch.py NAB.txt bash
+python3 ./python/Flesch.py NASB.txt bash
+python3 ./python/Flesch.py NIV.txt bash
+python3 ./python/Flesch.py NKJV.txt bash
+python3 ./python/Flesch.py NLT.txt bash
+python3 ./python/Flesch.py WEB.txt bash
+python3 ./python/Flesch.py YLT.txt bash
+
+echo 
+
+javac -d ./ ./java/Flesch.java
+java Flesch ASV.txt bash
+java Flesch BBE.txt bash
+java Flesch DARBY.txt bash
+java Flesch DRB.txt bash
+java Flesch KJ21.txt bash
+java Flesch KJV.txt bash
+java Flesch NAB.txt bash
+java Flesch NASB.txt bash
+java Flesch NIV.txt bash
+java Flesch NKJV.txt bash
+java Flesch NLT.txt bash
+java Flesch WEB.txt bash
+java Flesch YLT.txt bash
+rm Flesch.class
+
+echo
+
+./perl/Flesch.pl ASV.txt
+./perl/Flesch.pl BBE.txt
+./perl/Flesch.pl DARBY.txt
+./perl/Flesch.pl DRB.txt
+./perl/Flesch.pl KJ21.txt
+./perl/Flesch.pl KJV.txt
+./perl/Flesch.pl NAB.txt
+./perl/Flesch.pl NASB.txt
+./perl/Flesch.pl NIV.txt
+./perl/Flesch.pl NKJV.txt
+./perl/Flesch.pl NLT.txt
+./perl/Flesch.pl WEB.txt
+./perl/Flesch.pl YLT.txt
+
+echo
+
+gfortran ./fortran/Flesch.f95
 a.out ASV.txt
-./cpp/a.out ASV.txt
-echo
-python3 ./python/Flesch.py ASV.txt
-echo
-./cpp/a.out BBE.txt
-./cpp/a.out DARBY.txt
-./cpp/a.out DRB.txt
-./cpp/a.out KJ21.txt
-./cpp/a.out KJV.txt
-./cpp/a.out NAB.txt
-./cpp/a.out NASB.txt
-./cpp/a.out NIV.txt
-./cpp/a.out NKJV.txt
-./cpp/a.out NLT.txt
-./cpp/a.out WEB.txt
-./cpp/a.out YLT.txt 
+a.out BBE.txt
+a.out DARBY.txt
+a.out DRB.txt
+a.out KJ21.txt
+a.out KJV.txt
+a.out NAB.txt
+a.out NASB.txt
+a.out NIV.txt
+a.out NKJV.txt
+a.out NLT.txt
+a.out WEB.txt
+a.out YLT.txt
+rm a.out
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
