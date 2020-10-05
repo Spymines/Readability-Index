@@ -16,6 +16,16 @@ public static void main(String args[]){
 		ArrayList<String> wordList = new ArrayList<String>();
 		importWordList(wordList);
 	
+		//Setup for bash command line argument
+		boolean bash = false;
+		if(args.length == 2){	
+			if(args[1].equals("bash")){
+				bash = true;
+			}
+		}
+		String name = args[0]; 
+		name = name.substring(0, name.indexOf('.'));
+
 		//Reads in file word by word
 		String filename = "/pub/pounds/CSC330/translations/" + args[0];
 		BufferedReader inFile = new BufferedReader(new FileReader(filename));
@@ -45,7 +55,7 @@ public static void main(String args[]){
 //		System.out.print("Difficult Count: ");
 //		System.out.println(difficultCount);	
 
-		computeScores(wordCount, sentenceCount, syllableCount, difficultCount);
+		computeScores(wordCount, sentenceCount, syllableCount, difficultCount, bash, name);
 	}
 	catch(IOException e){
 		System.out.println("File not found.");
@@ -157,7 +167,7 @@ static boolean isDifficult(String word, ArrayList<String> wordList){
 }
 
 //Computes and prints final scores
-static void computeScores(double wordCount, double sentenceCount, double syllableCount, double difficultCount){
+static void computeScores(double wordCount, double sentenceCount, double syllableCount, double difficultCount, boolean bash, String name){
 	double alpha = syllableCount/wordCount;
 	double beta = wordCount/sentenceCount; 
 
@@ -170,9 +180,14 @@ static void computeScores(double wordCount, double sentenceCount, double syllabl
 	if(dcAlpha > 0.05)
 		daleChall += 3.636;		
 
-	System.out.printf("Flesch = %.0f\n", flesch); 
-	System.out.printf("Flesch-Kincaid = %.1f\n", fleschKincaid);
-	System.out.printf("Dale Chall = %.1f\n", daleChall);
+	if(bash){
+		System.out.printf("Java\t\t%s\t\t%.0f\t%.1f\t\t%.1f\n", name, flesch, fleschKincaid, daleChall);
+	}
+	else{
+		System.out.printf("Flesch = %.0f\n", flesch); 
+		System.out.printf("Flesch-Kincaid = %.1f\n", fleschKincaid);
+		System.out.printf("Dale-Chall = %.1f\n", daleChall);
+	}
 
 }
 
