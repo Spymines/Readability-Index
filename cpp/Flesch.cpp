@@ -49,15 +49,15 @@ int main(int argc, char* argv[]){
 			formatWord(word);
 			if (isDifficult(difficultWords,word))
 				difficultCount++;
-			}
 			syllableCount += countSyllables(word);
+		}
 	}
 
 //Test print statements
-	cout << "Sentences: " << sentenceCount << endl; 
-	cout << "Words: " << wordCount << endl; 
-	cout << "Syllables: " << syllableCount << endl; 
-	cout << "Difficult: " << difficultCount << endl; 
+//	cout << "Sentences: " << sentenceCount << endl; 
+//	cout << "Words: " << wordCount << endl; 
+//	cout << "Syllables: " << syllableCount << endl; 
+//	cout << "Difficult: " << difficultCount << endl; 
 
 	computeLevels(wordCount, sentenceCount, syllableCount, difficultCount);
 }
@@ -112,11 +112,8 @@ int countSyllables(string word){
 		}
 	}
 	if(tolower(word[word.size()-1]) == 'e'){
-		if(isVowel(tolower(word[word.size()-2]))){
-			
-		}
-		else{
-			currCount--;
+		if(!isVowel(tolower(word[word.size()-2]))){
+			currCount--;		
 		}
 	}	
 	if(currCount <= 0)
