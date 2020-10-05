@@ -70,7 +70,7 @@ def isVowel(char):
 		return False	
 
 #Computes and prints scores
-def computeScores(sentenceCount, wordCount, syllableCount, difficultCount):
+def computeScores(sentenceCount, wordCount, syllableCount, difficultCount, bash,name):
 	alpha = syllableCount/wordCount
 	beta = wordCount/sentenceCount
 	
@@ -84,9 +84,12 @@ def computeScores(sentenceCount, wordCount, syllableCount, difficultCount):
 	if(alphaDC > 0.05):
 		daleChall += 3.6365
 
-	print("Flesch: ", round(flesch))
-	print("Flesch Kincaid: ", round(fleschKincaid, 1))
-	print("Dale Chall: ", round(daleChall, 1))
+	if(bash):
+		print("Python\t       ", name.strip(), "\t\t", round(flesch), "\t", round(fleschKincaid,1), "\t\t", round(daleChall,1))
+	else:
+		print("Flesch: ", round(flesch))
+		print("Flesch Kincaid: ", round(fleschKincaid, 1))
+		print("Dale Chall: ", round(daleChall, 1))
 
 
 
@@ -95,6 +98,15 @@ def computeScores(sentenceCount, wordCount, syllableCount, difficultCount):
 
 filename = "/pub/pounds/CSC330/translations/" + sys.argv[1]
 f= open(filename, encoding="utf8", errors = 'ignore')
+
+
+bash = False
+if(len(sys.argv) == 3):
+	if(sys.argv[2] == "bash"):
+		bash = True
+
+name = sys.argv[1]
+name = name[0:name.index('.')]
 
 difficultWords = set()
 importDifficult(difficultWords)
@@ -121,5 +133,5 @@ for x in f:
 #print("Sentence count: ", sentenceCount)
 #print("Syllable count: ", syllableCount)
 #print("Difficult count: ", difficultCount)
-computeScores(sentenceCount, wordCount, syllableCount, difficultCount)
+computeScores(sentenceCount, wordCount, syllableCount, difficultCount, bash, name)
 f.close()
