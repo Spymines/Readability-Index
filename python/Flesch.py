@@ -1,14 +1,10 @@
-#Word Count Works
-#Need to fix importing difficult words
-
-
 import sys
 
+#Puts the word list into a set called difficult words
 def importDifficult(difficultWords):
 	f = open("/pub/pounds/CSC330/dalechall/wordlist1995.txt","r")
 	for word in f:
-		difficultWords.append(word.rstrip())
-#		print(word)
+		difficultWords.add(cleanUp(word.rstrip()))
 
 #Binary Search to look through difficult word list, based off Rosetta Code
 def isDifficult(word, difficultWords):
@@ -16,23 +12,22 @@ def isDifficult(word, difficultWords):
 	high = len(difficultWords)-1
 	while low <= high:
 		mid = (low + high)//2
-		print(mid, " ", word, " ", difficultWords[mid])
 		if(difficultWords[mid] > word):
 			 high = mid -1
 		elif(difficultWords[mid] < word):
 			low = mid + 1
 		else:
-			print("found")
 			return False
-	print("not found")
 	return True
 
+#Returns a bool based on if the passed in word is fully alphabetic
 def isWord(word):
 	if(word.isnumeric()):
 		return False
 	else: 
 		return True
 
+#Returns a bool based on if the passed end word ends a sentence
 def endsSentence(word):
 	if(len(word) == 1):
 		return False
@@ -42,35 +37,39 @@ def endsSentence(word):
 	else:
 		return False 
 
+#Formats the input word and returns it
 def cleanUp(word):
-	return word.translate({ord(i): None for i in '",.:;?![]{}/'})
+	temp = ""
+	for char in word:
+		if(char.isalpha()):
+			temp += char
+	return temp
 
+#Returns a syllable count for the passed in word
 def countSyllables(word):
 	syllables = 0
 	if(len(word) == 1):
 		return 1
 	for x in range(0, len(word)):
 		if((x == 0) and (isVowel(word[x]))):
-#			print("first Vowel", word)
 			syllables += 1
 		elif(isVowel(word[x])):
 			if(not isVowel(word[x-1])):
-#				print(word[x], " " , word[x-1], " add one")
 				syllables += 1
 	if((word[len(word)-1] == 'e') and (not isVowel(word[len(word)-2]))):
 		syllables -= 1
-#	print(word, " ", syllables)
 	if(syllables <= 0):
 		syllables = 1
 	return syllables		
 
+#Returns a bool to tell if the passed in char is a vowel
 def isVowel(char):
 	if(char == 'a' or char == 'e' or char == 'i' or char == 'o' or char == 'u' or char == 'y'):
 		return True
 	else: 
 		return False	
 
-
+#Computes and prints scores
 def computeScores(sentenceCount, wordCount, syllableCount, difficultCount):
 	alpha = syllableCount/wordCount
 	beta = wordCount/sentenceCount
@@ -89,15 +88,15 @@ def computeScores(sentenceCount, wordCount, syllableCount, difficultCount):
 	print("Flesch Kincaid: ", round(fleschKincaid, 1))
 	print("Dale Chall: ", round(daleChall, 1))
 
+
+
 #Main body of the program starts
 
-filename = "test.txt"
 
-#Commented out for testing 
-#filename = "/pub/pounds/CSC330/translations/" + sys.argv[1]
-f= open(filename, "r")
+filename = "/pub/pounds/CSC330/translations/" + sys.argv[1]
+f= open(filename, encoding="utf8", errors = 'ignore')
 
-difficultWords = []
+difficultWords = set()
 importDifficult(difficultWords)
 wordCount = 0
 sentenceCount = 0
@@ -113,13 +112,14 @@ for x in f:
 			if(endsSentence(currWord)):
 				sentenceCount += 1
 			currWord = cleanUp(currWord)
-			syllableCount = syllableCount + countSyllables(currWord)
-			if(isDifficult(currWord, difficultWords)):
-				difficultCount += 1
+			if(len(currWord) > 0):
+				syllableCount = syllableCount + countSyllables(currWord)
+				if(currWord not in difficultWords):
+					difficultCount += 1
 
-print("Word count: ", wordCount)
-print("Sentence count: ", sentenceCount)
-print("Syllable count: ", syllableCount)
-print("Difficult count: ", difficultCount)
+#print("Word count: ", wordCount)
+#print("Sentence count: ", sentenceCount)
+#print("Syllable count: ", syllableCount)
+#print("Difficult count: ", difficultCount)
 computeScores(sentenceCount, wordCount, syllableCount, difficultCount)
 f.close()

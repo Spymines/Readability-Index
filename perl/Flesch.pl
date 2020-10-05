@@ -4,6 +4,7 @@ use warnings;
 
 use Scalar::Util qw(looks_like_number);
 
+#Determines if the passed in char is a vowel
 sub isVowel{
 	my $c = $_[0];
 	if ($c eq 'a' or $c eq 'e' or $c eq 'i' or $c eq 'o' or $c  eq 'u' or $c eq 'y'){
@@ -13,6 +14,7 @@ sub isVowel{
 	}
 }
 
+#Returns a syllable count for the passed in word
 sub countSyllables{
 	my $currWord = $_[0];
 	my $i = 0;
@@ -38,9 +40,8 @@ sub countSyllables{
 	}
 	return $count;
 } 
-#substr(word,n,1)
 
-
+#Opens file specified in command line
 my $filename = $ARGV[0] or die "Need to get file name on the command line\n";
 
 open(DATA, "</pub/pounds/CSC330/translations/$filename") or die "Couldn't open file $filename,$!";
@@ -104,47 +105,28 @@ foreach my $line (@all_lines){
          	        if($diff){
 				$difficultCount++;
 			}       
-			$syllableCount = $syllableCount + countSyllables($token);
-			
-
-
-
-
-#			#Count Syllables
-#			my $currCount = 0;
-#			my $last = '';
-#			my $first = 1;
-#			foreach my $char(split //, $token){
-#				if($first){
-#					if($char eq 'a' or $char eq 'e' or $char eq 'i' or $char eq 'o' or $char eq 'u' or $char eq 'y') 
-#						$currCount++;
-#					}
-#					$first = 0;
-#				}elsif($char eq 'a' or $char eq 'e' or $char eq 'i' or $char eq 'o' or $char eq 'u' or $char eq 'y'){
-#					if($last ne 'a' and $last ne 'e' and $last ne 'i' and $last ne 'o' and $last ne 'u' and $last ne 'y'){
-#						$currCount++;
-#					}
-#				}
-#				$last = $char;				
-#			}
-#			#How to check for ending e
-#			if($last eq 'e'){
-#				my $t = substr($token, $token.length()-1,1);
-#				if($t eq 'a' or $t eq 'e' or $t eq 'i' or $t eq 'o' or $t eq 'u' or $t eq 'y'){
-#					$currCount--;
-#				}
-#			}	
-#			if($currCount <= 0){
-#				$currCount = 1; 
-#			}
-#			$syllableCount += $currCount;				
+			$syllableCount = $syllableCount + countSyllables($token);			
 		}
 	}		
 }
 
-print "Word Count: $wordCount\n";
-print "Sentence Count: $sentenceCount\n";
-print "Syllable Count: $syllableCount\n"; 
-print "Difficult Count: $difficultCount\n";
+#print "Word Count: $wordCount\n";
+#print "Sentence Count: $sentenceCount\n";
+#print "Syllable Count: $syllableCount\n"; 
+#print "Difficult Count: $difficultCount\n";
 
+my $alpha = $syllableCount/$wordCount;
+my $beta = $wordCount/$sentenceCount;
+my $dcAlpha = $difficultCount/$wordCount;
 
+my $flesch = 206.835 - ($alpha * 84.6) - ($beta * 1.015);
+my $fleschKincaid = ($alpha * 11.8) + ($beta * 0.39) - 15.59;
+my $daleChall = ($dcAlpha * 100 * 0.1579) + ($beta * 0.0496);
+
+if($dcAlpha gt 0.05){
+	$daleChall = $daleChall + 3.6365;
+}
+
+printf("Flesch: %.0f\n", $flesch);
+printf("Flesch-Kincaid: %.1f\n", $fleschKincaid);
+printf("Dale-Chall: %.1f\n", $daleChall);

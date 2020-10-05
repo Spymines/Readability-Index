@@ -1,8 +1,3 @@
-//C++ Flesch file, currently working on file read in
-//File read in works
-//Getting seg faule and more difficult words than actual words
-
-
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -28,7 +23,6 @@ int main(int argc, char* argv[]){
 	checkInput(argc); 
 
 	string providedFile = argv[1];
-//	string textFile = "./test.txt";
 	string textFile = "/pub/pounds/CSC330/translations/" + providedFile; 
 	
 	ifstream infile; 
@@ -52,15 +46,14 @@ int main(int argc, char* argv[]){
 			wordCount++; 
 			if (endsSentence(word))
 				sentenceCount++; 
-//		formatWord(word);
-//		syllableCount += countSyllables(word);
+			formatWord(word);
 			if (isDifficult(difficultWords,word))
 				difficultCount++;
-			formatWord(word);
+			}
 			syllableCount += countSyllables(word);
-		}
 	}
 
+//Test print statements
 	cout << "Sentences: " << sentenceCount << endl; 
 	cout << "Words: " << wordCount << endl; 
 	cout << "Syllables: " << syllableCount << endl; 
@@ -125,9 +118,7 @@ int countSyllables(string word){
 		else{
 			currCount--;
 		}
-	}
-	
-	cout << word << " " << currCount << endl;	
+	}	
 	if(currCount <= 0)
 		currCount = 1;
 	return currCount; 
@@ -178,8 +169,7 @@ void importDifficultWords(vector<string> &difficultWords){
 }
 
 //Checks to see if the string sent in is on the difficult word list
-bool isDifficult(vector<string> &difficultWords, string word){ 
-	formatWord(word);
+bool isDifficult(vector<string> &difficultWords, string word){
 	if (word.compare("") == 0 || word.compare(" ") == 0)
 		return false;
 	for(int i = 0; i < word.size(); i++){
@@ -211,7 +201,7 @@ void formatWord(string &word){
 	bool done = false;
 	while(!done){
 		int location = -1; 
-		location = word.find_first_of("[].,;:!?/1234567890()#\"");
+		location = word.find_first_of("[].,;:!?/1234567890()#\"'");
 		if(location == -1)
 			done = true; 
 		else 

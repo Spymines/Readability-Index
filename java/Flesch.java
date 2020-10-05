@@ -6,8 +6,6 @@ public class Flesch{
 
 public static void main(String args[]){
 	
-//static int isWord(String word);
-	
 	try{
 
 		double wordCount = 0; 
@@ -20,8 +18,6 @@ public static void main(String args[]){
 	
 		//Reads in file word by word
 		String filename = "/pub/pounds/CSC330/translations/" + args[0];
-//		filename = "test.txt";
-//		File txtFile = new File(filename);
 		BufferedReader inFile = new BufferedReader(new FileReader(filename));
 		while(inFile.ready()){
 			String line = inFile.readLine();
@@ -30,7 +26,6 @@ public static void main(String args[]){
 			for(String word:words){			
 
 				if(isWord(word)){
-					//System.out.println(word);
 					wordCount++;
 					if(endsSentence(word))
 						sentenceCount++;
@@ -41,14 +36,14 @@ public static void main(String args[]){
 				}
 			}
 		}
-		System.out.print("Word Count: ");	
-		System.out.println(wordCount);
-		System.out.print("Sentence Count: ");		
-		System.out.println(sentenceCount);
-		System.out.print("Syllable Count: ");
-		System.out.println(syllableCount);
-		System.out.print("Difficult Count: ");
-		System.out.println(difficultCount);	
+//		System.out.print("Word Count: ");	
+//		System.out.println(wordCount);
+//		System.out.print("Sentence Count: ");		
+//		System.out.println(sentenceCount);
+//		System.out.print("Syllable Count: ");
+//		System.out.println(syllableCount);
+//		System.out.print("Difficult Count: ");
+//		System.out.println(difficultCount);	
 
 		computeScores(wordCount, sentenceCount, syllableCount, difficultCount);
 	}
@@ -58,6 +53,7 @@ public static void main(String args[]){
 	}
 }
 
+//Puts word list into an array list
 static void importWordList(ArrayList<String> wordList){
 	try{
 		String tempWord;
@@ -77,6 +73,7 @@ static void importWordList(ArrayList<String> wordList){
 
 }
 
+//Returns a boolean based on if the passed in string contains numbers
 static boolean isWord(String word){
 	boolean temp = true; 
 	for(int i = 0; i < word.length(); i++){
@@ -88,6 +85,7 @@ static boolean isWord(String word){
 	return temp;
 }
 
+//Determines if the passed in string ends a sentence
 static boolean endsSentence(String word){
 	if(word.length() != 0){
 		char c = word.charAt(word.length()-1);
@@ -101,6 +99,7 @@ static boolean endsSentence(String word){
 	return false;
 }
 
+//Removes everythng from a string except alphabetic characters
 static String formatWord(String word){
 	StringBuilder tempWord = new StringBuilder(word);
 	for(int i = tempWord.length()-1; i >= 0 ; i--){
@@ -111,6 +110,7 @@ static String formatWord(String word){
 	return word.toLowerCase();
 }
 
+//Returns a syllable count for the passed in word
 static int countSyllables(String word){
 	int syllableCount = 0; 
 	for(int i = 0; i < word.length(); i++){
@@ -128,12 +128,14 @@ static int countSyllables(String word){
 	return syllableCount; 
 }
 
+//Returns a bool to say if the passed in char is a vowel
 static boolean isVowel(char c){
 	if(c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u' || c == 'y')
 		return true; 
 	return false;
 }
 
+//Determines if the passed in bool is in the wordList
 static boolean isDifficult(String word, ArrayList<String> wordList){	
 	int low = 0; 
 	int high = wordList.size()-1;
@@ -154,6 +156,7 @@ static boolean isDifficult(String word, ArrayList<String> wordList){
 
 }
 
+//Computes and prints final scores
 static void computeScores(double wordCount, double sentenceCount, double syllableCount, double difficultCount){
 	double alpha = syllableCount/wordCount;
 	double beta = wordCount/sentenceCount; 
