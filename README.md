@@ -6,6 +6,7 @@ How to run each language from within it's respective folder:
 
 Filename in each case is something like "KJV.txt". The path to reach the translation is coded in. 
 
+All command line arguments are case sensitive.
 
 C++:
 	To compile type : c++ Flesch.cpp
@@ -23,11 +24,12 @@ Java:
 
 Perl:
 	To run with standard printout: Flesch.pl Filename
+	To run with bash style single line printout: Flesch.pl Filename bash
 
 Fortran:
 	To compile: gfortran Flesch.f95
-	To run with standard printout: a,out Filename
-
+	To run with standard printout: a.out Filename
+	To run with bash style single line printout: a.out Filename bash
 
 
 
