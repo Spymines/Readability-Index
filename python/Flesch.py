@@ -1,3 +1,8 @@
+#Trevor Mines
+#CSC 330
+#Flesch Project
+#10/5/2020
+
 import sys
 
 #Puts the word list into a set called difficult words

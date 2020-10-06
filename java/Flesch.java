@@ -1,3 +1,8 @@
+//Trevor Mines
+//CSC 330 
+//FLesch Project
+//10/5/2020
+
 import java.io.*;
 import java.util.*;
 import java.lang.*;

@@ -1,3 +1,9 @@
+//Trevor Mines
+//CSC 330
+//Flesch Project
+//10/5/2020
+
+
 #include <iostream>
 #include <fstream>
 #include <string>

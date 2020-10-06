@@ -1,13 +1,18 @@
+!Trevor Mines
+!CSC 330
+!Flesch Project
+!10/5/2020
+
 program Flesch
 
 character(:), allocatable :: long_string, wordlist
-character(:), allocatable :: currWord
-integer :: filesize,j,k,wordsize,l
+character(:), allocatable :: currWord, transName
+integer :: filesize,j,k,wordsize,l, dotLoc
 real :: wordCount, sentenceCount, syllableCount, difficultCount
 real :: alpha, beta, dcAlpha, fleschVal, fleschKincaid, daleChall
-character(len = 50) :: filename
+character(len = 50) :: filename, bashHolder
 integer :: counter, i
-logical :: out
+logical :: out, bash
 
 interface 
         subroutine read_file(long_string, filesize, filename)
@@ -55,6 +60,16 @@ interface
 end interface
 
 call GET_COMMAND_ARGUMENT(1, filename)
+
+!Set up for bash script
+call GET_COMMAND_ARGUMENT(2, bashHolder)
+bash = .false.
+if(bashHolder .eq. "bash") then
+        bash = .true.
+end if
+dotLoc = INDEX(filename, ".");
+allocate(character(dotLoc-1) :: transName)
+transName = filename(1:dotLoc-1)
 
 call read_file(long_string, filesize, filename)
 call getWordList(wordlist)
@@ -137,9 +152,20 @@ end if
 !Using old variable to hold casted version
 k = int(fleschVal)
 
-print "(a8, i2)","Flesch: ", k
-print "(a16, f3.1)", "Flesch-Kincaid: ", fleschKincaid
-print "(a12, f3.1)","Dale-Chall: ", daleChall
+if(bash) then
+        if(len(transName) == 3) then
+                print "(a16, a3, a13, i2, f9.1, f16.1)", "Fortran         ", transName, "" , k,fleschKincaid, daleChall
+        else if(len(transName) == 4) then
+                print "(a16, a4, a12, i2, f9.1, f16.1)", "Fortran         ", transName,"", k,fleschKincaid, daleChall
+        else
+                print "(a16, a5, a11,  i2, f9.1, f16.1)", "Fortran         ", transName,"", k,fleschKincaid, daleChall
+        end if 
+else
+        print "(a8, i2)","Flesch: ", k
+        print "(a16, f3.1)", "Flesch-Kincaid: ", fleschKincaid
+        print "(a12, f3.1)","Dale-Chall: ", daleChall
+end if
+
 end program Flesch
 
 

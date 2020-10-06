@@ -2,6 +2,11 @@
 use strict;
 use warnings;
 
+#Trevor Mines
+#CSC 330
+#Flesch Project
+#10/5/2020
+
 use Scalar::Util qw(looks_like_number);
 
 #Determines if the passed in char is a vowel
@@ -47,6 +52,16 @@ my $filename = $ARGV[0] or die "Need to get file name on the command line\n";
 open(DATA, "</pub/pounds/CSC330/translations/$filename") or die "Couldn't open file $filename,$!";
 
 my @all_lines = <DATA>;
+
+my $bash = 0;
+#Sets up bash script
+if($#ARGV ==  1){
+	if($ARGV[1] eq "bash"){
+		$bash = 1;
+	}
+}
+#Gets translation name
+my $name = substr($filename, 0, index($filename, '.'));
 
 my $wordCount = 0;
 my $syllableCount = 0;
@@ -127,6 +142,14 @@ if($dcAlpha gt 0.05){
 	$daleChall = $daleChall + 3.6365;
 }
 
-printf("Flesch: %.0f\n", $flesch);
-printf("Flesch-Kincaid: %.1f\n", $fleschKincaid);
-printf("Dale-Chall: %.1f\n", $daleChall);
+if($bash){
+	printf("Perl\t\t%s\t\t%.0f\t%.1f\t\t%.1f\n", $name, $flesch, $fleschKincaid, $daleChall);
+}else{
+	printf("Flesch: %.0f\n", $flesch);
+	printf("Flesch-Kincaid: %.1f\n", $fleschKincaid);
+	printf("Dale-Chall: %.1f\n", $daleChall);
+}
+
+
+
+
